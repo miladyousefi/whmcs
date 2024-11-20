@@ -1,0 +1,19 @@
+{
+    "name": "miladyousefi/whmcs-addon-framework",
+    "description": "Framework for creating WHMCS addon modules.",
+    "type": "project",
+    "require": {
+        "php": ">=8.0",
+        "symfony/console": "^6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "WHMCS\\Module\\Addon\\": "src/"
+        }
+    },
+    "scripts": {
+        "post-create-project-cmd": [
+            "php commands/SetupCommand.php"
+        ]
+    }
+}
