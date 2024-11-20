@@ -4,12 +4,6 @@
     "type": "project",
     "keywords": ["whmcs"],
     "license": "MIT",
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/miladyousefi/whmcs"
-        }
-    ],
     "require": {
         "php": ">=8.0",
         "miladyousefi/whmcs": "dev-main",
