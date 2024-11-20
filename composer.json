@@ -2,6 +2,8 @@
     "name": "miladyousefi/whmcs",
     "description": "Framework for creating WHMCS addon modules.",
     "type": "project",
+    "keywords": ["whmcs"],
+    "license": "MIT",
     "repositories": [
         {
             "type": "vcs",
@@ -25,5 +27,16 @@
     },
     "extra": {
         "installer-name": "whmcs-addon"
-    }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
 }
