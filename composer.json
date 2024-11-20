@@ -10,7 +10,6 @@
     ],
     "require": {
         "php": ">=8.0",
-        "miladyousefi/whmcs": "dev-main",
         "symfony/console": "^6.0"
     },
     "autoload": {
