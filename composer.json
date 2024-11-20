@@ -1,5 +1,5 @@
 {
-    "name": "miladyousefi/whmcs-addon-framework",
+    "name": "miladyousefi/whmcs",
     "description": "Framework for creating WHMCS addon modules.",
     "type": "project",
     "require": {
