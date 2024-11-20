@@ -29,7 +29,8 @@
         "allow-plugins": {
             "pestphp/pest-plugin": true,
             "php-http/discovery": true
-        }
+        },
+        "stability": "dev"
     },
     "minimum-stability": "dev",
     "prefer-stable": true
