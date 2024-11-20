@@ -2,8 +2,15 @@
     "name": "miladyousefi/whmcs",
     "description": "Framework for creating WHMCS addon modules.",
     "type": "project",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/miladyousefi/whmcs"
+        }
+    ],
     "require": {
         "php": ">=8.0",
+        "miladyousefi/whmcs": "dev-main",
         "symfony/console": "^6.0"
     },
     "autoload": {
