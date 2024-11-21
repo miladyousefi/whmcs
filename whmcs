@@ -5,7 +5,9 @@ require __DIR__ . '/vendor/autoload.php';
 
 use Symfony\Component\Console\Application;
 require_once __DIR__ . '/commands/SetupCommand.php';
+require_once __DIR__ . '/commands/MigrationCommand.php';
 
 $app = new Application('WHMCS Addon Framework', '1.0.0');
 $app->add(new SetupCommand());
+$app->add(new MigrationCommand());
 $app->run();

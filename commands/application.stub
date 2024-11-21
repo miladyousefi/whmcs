@@ -1,9 +1,8 @@
 <?php
+namespace WHMCS\Module\Addon\$addonName\src;
 
 require __DIR__ . '/../vendor/autoload.php';
-
 use WHMCS\Database\Capsule;
-namespace WHMCS\Module\Addon\$addonName\Service;
 
 class Application
 {
