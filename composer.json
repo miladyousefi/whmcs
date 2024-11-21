@@ -17,7 +17,7 @@
         "post-create-project-cmd": [
             "@composer install",
             "@composer dump-autoload",
-            "php commands/SetupCommand.php"
+            "php whmcs make:addon $(basename `pwd`)"
         ]
     },
     "config": {
