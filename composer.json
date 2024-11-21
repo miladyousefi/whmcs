@@ -31,6 +31,12 @@
         },
         "stability": "dev"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/miladyousefi/whmcs"
+        }
+    ],
     "minimum-stability": "dev",
     "prefer-stable": true
 }
