@@ -2,6 +2,7 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -20,11 +21,20 @@ class SetupCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        // Get the addon name from the input argument
-        $addonName = basename(getcwd()); // Using the folder name as the addon name
+        $addonName = $input->getArgument('addonName');
         $currentDir = getcwd(); // Current working directory
 
-        // Path to the new addonName.php file
+        // Ensure the src directory exists
+        $srcDir = $currentDir . DIRECTORY_SEPARATOR . 'src';
+        if (!is_dir($srcDir)) {
+            if (!mkdir($srcDir, 0777, true)) {
+                $output->writeln("<error>Failed to create src directory. Please check permissions.</error>");
+                return Command::FAILURE;
+            }
+            $output->writeln("<info>Created src directory: $srcDir</info>");
+        }
+
+        // Path to the new addon file
         $addonFilePath = $currentDir . DIRECTORY_SEPARATOR . $addonName . '.php';
 
         // Path to the stub file (template)
@@ -34,13 +44,11 @@ class SetupCommand extends Command
             return Command::FAILURE;
         }
 
-        // Read stub content
+        // Read stub content and replace placeholders
         $addonFileContent = file_get_contents($stubFile);
-
-        // Replace placeholders in the stub with the actual addon name
         $addonFileContent = str_replace('$addonName', $addonName, $addonFileContent);
 
-        // Create the addonName.php file
+        // Create the addon file
         if (file_put_contents($addonFilePath, $addonFileContent)) {
             $output->writeln("<info>Created addon file: $addonFilePath</info>");
         } else {
@@ -48,8 +56,8 @@ class SetupCommand extends Command
             return Command::FAILURE;
         }
 
-        // Now create the Application.php without namespace
-        $applicationFilePath = $currentDir . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Application.php';
+        // Now create the Application.php file
+        $applicationFilePath = $srcDir . DIRECTORY_SEPARATOR . 'Application.php';
         $applicationStub = __DIR__ . '/application.stub';
 
         if (!file_exists($applicationStub)) {
@@ -57,13 +65,9 @@ class SetupCommand extends Command
             return Command::FAILURE;
         }
 
-        // Read application stub content
         $applicationFileContent = file_get_contents($applicationStub);
-
-        // Replace placeholder `$addonName` in the Application.php
         $applicationFileContent = str_replace('$addonName', $addonName, $applicationFileContent);
 
-        // Create the Application.php file
         if (file_put_contents($applicationFilePath, $applicationFileContent)) {
             $output->writeln("<info>Created Application file: $applicationFilePath</info>");
         } else {
@@ -74,3 +78,5 @@ class SetupCommand extends Command
         return Command::SUCCESS;
     }
 }
+
+
