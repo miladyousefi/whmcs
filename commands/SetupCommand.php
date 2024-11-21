@@ -105,7 +105,33 @@ class SetupCommand extends Command
         }
 
 
+        // Now create the AdminDispatcher.php file
+        $adminDispatcherDir = $currentDir . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Dispatcher';
+        if (!is_dir($adminDispatcherDir)) {
+            if (!mkdir($adminDispatcherDir, 0777, true)) {
+                $output->writeln("<error>Failed to create adminDispatcher directory. Please check permissions.</error>");
+                return Command::FAILURE;
+            }
+            $output->writeln("<info>Created adminDispatcher directory: $adminDispatcherDir</info>");
+        }
 
+        $adminDispatcherFilePath = $adminDispatcherDir . DIRECTORY_SEPARATOR . 'AdminDispatcher.php';
+        $adminDispatcherStub = __DIR__ . '/adminDispatcher.stub';
+
+        if (!file_exists($adminDispatcherStub)) {
+            $output->writeln("<error>Stub file not found at: $adminDispatcherStub</error>");
+            return Command::FAILURE;
+        }
+
+        $adminDispatcherFileContent = file_get_contents($adminDispatcherStub);
+        $adminDispatcherFileContent = str_replace('${addonName}', $addonName, $adminDispatcherFileContent);
+
+        if (file_put_contents($adminDispatcherFilePath, $adminDispatcherFileContent)) {
+            $output->writeln("<info>Created AdminDispatcher file: $adminDispatcherFilePath</info>");
+        } else {
+            $output->writeln("<error>Failed to create $adminDispatcherFilePath. Please check permissions.</error>");
+            return Command::FAILURE;
+        }
 
 
         return Command::SUCCESS;
