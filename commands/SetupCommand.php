@@ -75,8 +75,39 @@ class SetupCommand extends Command
             return Command::FAILURE;
         }
 
+
+        // Now create the Helper.php file
+        $helperDir = $currentDir . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Helper';
+        if (!is_dir($helperDir)) {
+            if (!mkdir($helperDir, 0777, true)) {
+                $output->writeln("<error>Failed to create Helper directory. Please check permissions.</error>");
+                return Command::FAILURE;
+            }
+            $output->writeln("<info>Created Helper directory: $helperDir</info>");
+        }
+
+        $helperFilePath = $helperDir . DIRECTORY_SEPARATOR . 'Helper.php';
+        $helperStub = __DIR__ . '/helper.stub';
+
+        if (!file_exists($helperStub)) {
+            $output->writeln("<error>Stub file not found at: $helperStub</error>");
+            return Command::FAILURE;
+        }
+
+        $helperFileContent = file_get_contents($helperStub);
+        $helperFileContent = str_replace('${addonName}', $addonName, $helperFileContent);
+
+        if (file_put_contents($helperFilePath, $helperFileContent)) {
+            $output->writeln("<info>Created helper file: $helperFilePath</info>");
+        } else {
+            $output->writeln("<error>Failed to create $helperFilePath. Please check permissions.</error>");
+            return Command::FAILURE;
+        }
+
+
+
+
+
         return Command::SUCCESS;
     }
 }
-
-
