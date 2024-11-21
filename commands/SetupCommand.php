@@ -1,4 +1,5 @@
 <?php
+
 require __DIR__ . '/../vendor/autoload.php';
 
 use Symfony\Component\Console\Command\Command;
@@ -20,10 +21,10 @@ class SetupCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         // Get the addon name from the input argument
-        $addonName = $input->getArgument('addonName');
-        $currentDir = getcwd();  // Current working directory
+        $addonName = basename(getcwd()); // Using the folder name as the addon name
+        $currentDir = getcwd(); // Current working directory
 
-        // Path to the new `addonName.php` file
+        // Path to the new addonName.php file
         $addonFilePath = $currentDir . DIRECTORY_SEPARATOR . $addonName . '.php';
 
         // Path to the stub file (template)
@@ -67,16 +68,6 @@ class SetupCommand extends Command
             $output->writeln("<info>Created Application file: $applicationFilePath</info>");
         } else {
             $output->writeln("<error>Failed to create $applicationFilePath. Please check permissions.</error>");
-            return Command::FAILURE;
-        }
-
-        // Rename the folder to the addon name after files have been created
-        $newFolderPath = dirname($currentDir) . DIRECTORY_SEPARATOR . $addonName;
-
-        if (rename($currentDir, $newFolderPath)) {
-            $output->writeln("<info>Folder renamed to: $addonName</info>");
-        } else {
-            $output->writeln("<error>Failed to rename folder. Please check permissions.</error>");
             return Command::FAILURE;
         }
 
