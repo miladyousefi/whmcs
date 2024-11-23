@@ -171,6 +171,35 @@ class SetupCommand extends Command
         }
 
 
+        // Creat Client Dispatcher 
+
+        $clientDispatcherStub = __DIR__ . '/clientDispatcher.stub';
+
+        if (!file_exists($clientDispatcherStub)) {
+            $output->writeln("<error>Stub file not found at: $clientDispatcherStub</error>");
+            return Command::FAILURE;
+        }
+
+        // Read the stub content
+        $clientDispatcherFileContent = file_get_contents($clientDispatcherStub);
+
+        // Replace the placeholder $addonName with the actual addon name
+        $clientDispatcherFileContent = str_replace('$addonName', $addonName, $clientDispatcherFileContent);
+
+        // Set the path to the AdminDispatcher.php file
+        $clientDispatcherFilePath = $adminDispatcherDir . DIRECTORY_SEPARATOR . 'ClientDispatcher.php';
+
+        // Create the AdminDispatcher.php file
+        if (file_put_contents($clientDispatcherFilePath, $clientDispatcherFileContent)) {
+            $output->writeln("<info>Created AdminDispatcher file: $clientDispatcherFilePath</info>");
+        } else {
+            $output->writeln("<error>Failed to create $clientDispatcherFilePath. Please check permissions.</error>");
+            return Command::FAILURE;
+        }
+
+
+
+
          // Now create the Router.php file
         $addonName = $input->getArgument('addonName');
 
