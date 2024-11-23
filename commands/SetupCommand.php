@@ -178,39 +178,39 @@ class SetupCommand extends Command
         $currentDir = getcwd();
 
         // Set the directory where the AdminDispatcher.php file will be created
-        $adminDispatcherDir = $currentDir . DIRECTORY_SEPARATOR . 'routes';
+        $routersatcherDir = $currentDir . DIRECTORY_SEPARATOR . 'routes';
 
         // Ensure the directory exists, create it if necessary
-        if (!is_dir($adminDispatcherDir)) {
-            if (!mkdir($adminDispatcherDir, 0777, true)) {
+        if (!is_dir($routersatcherDir)) {
+            if (!mkdir($routersatcherDir, 0777, true)) {
                 $output->writeln("<error>Failed to create adminDispatcher directory. Please check permissions.</error>");
                 return Command::FAILURE;
             }
-            $output->writeln("<info>Created adminDispatcher directory: $adminDispatcherDir</info>");
+            $output->writeln("<info>Created adminDispatcher directory: $routersatcherDir</info>");
         }
 
         // Path to the stub file
-        $adminDispatcherStub = __DIR__ . '/router.stub';
+        $RouterStub = __DIR__ . '/router.stub';
 
-        if (!file_exists($adminDispatcherStub)) {
-            $output->writeln("<error>Stub file not found at: $adminDispatcherStub</error>");
+        if (!file_exists($RouterStub)) {
+            $output->writeln("<error>Stub file not found at: $RouterStub</error>");
             return Command::FAILURE;
         }
 
         // Read the stub content
-        $adminDispatcherFileContent = file_get_contents($adminDispatcherStub);
+        $routerContent = file_get_contents($RouterStub);
 
         // Replace the placeholder $addonName with the actual addon name
-        $adminDispatcherFileContent = str_replace('$addonName', $addonName, $adminDispatcherFileContent);
+        $routerContent = str_replace('$addonName', $addonName, $routerContent);
 
         // Set the path to the AdminDispatcher.php file
-        $adminDispatcherFilePath = $adminDispatcherDir . DIRECTORY_SEPARATOR . 'Router.php';
+        $routerFilePath = $routersatcherDir . DIRECTORY_SEPARATOR . 'Router.php';
 
         // Create the AdminDispatcher.php file
-        if (file_put_contents($adminDispatcherFilePath, $adminDispatcherFileContent)) {
-            $output->writeln("<info>Created AdminDispatcher file: $adminDispatcherFilePath</info>");
+        if (file_put_contents($routerFilePath, $routerContent)) {
+            $output->writeln("<info>Created Router file: $routerFilePath</info>");
         } else {
-            $output->writeln("<error>Failed to create $adminDispatcherFilePath. Please check permissions.</error>");
+            $output->writeln("<error>Failed to create $routerFilePath. Please check permissions.</error>");
             return Command::FAILURE;
         }
 
