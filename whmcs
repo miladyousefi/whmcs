@@ -11,10 +11,13 @@ $dotenv->load();
 // Load commands
 require_once __DIR__ . '/commands/SetupCommand.php';
 require_once __DIR__ . '/commands/MigrationCommand.php';
-require_once __DIR__ . '/commands/ModelCommand.php'; // New Command
+require_once __DIR__ . '/commands/ModelCommand.php';
+require_once __DIR__ . '/commands/MakeEnvCommand.php';
+
 
 $app = new Application('WHMCS Addon Framework', '1.0.0');
+$app->add(new MakeEnvCommand()); 
 $app->add(new SetupCommand());
 $app->add(new MigrationCommand());
-$app->add(new ModelCommand()); // Add Model Command
+$app->add(new ModelCommand()); 
 $app->run();
