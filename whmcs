@@ -5,9 +5,6 @@ require __DIR__ . '/vendor/autoload.php';
 use Symfony\Component\Console\Application;
 use Dotenv\Dotenv;
 
-$dotenv = Dotenv::createImmutable(__DIR__);
-$dotenv->load();
-
 // Load commands
 require_once __DIR__ . '/commands/SetupCommand.php';
 require_once __DIR__ . '/commands/MigrationCommand.php';
@@ -21,3 +18,8 @@ $app->add(new SetupCommand());
 $app->add(new MigrationCommand());
 $app->add(new ModelCommand()); 
 $app->run();
+
+
+
+$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv->load();
