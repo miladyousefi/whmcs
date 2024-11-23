@@ -7,8 +7,8 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Illuminate\Support\Facades\File;
 
 class MigrationCommand extends Command
 {
@@ -18,7 +18,8 @@ class MigrationCommand extends Command
     {
         $this
             ->setDescription('Create a new migration file for the specified table.')
-            ->addArgument('tableName', InputArgument::REQUIRED, 'The name of the table for the migration');
+            ->addArgument('tableName', InputArgument::REQUIRED, 'The name of the table for the migration')
+            ->addOption('migrate', null, InputOption::VALUE_NONE, 'Run migrations after creating the migration file');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -42,7 +43,7 @@ class MigrationCommand extends Command
         $migrationFilePath = $databaseDir . DIRECTORY_SEPARATOR . $timestamp . '_' . $migrationFileName;
 
         // Load the stub file from the current directory
-        $stubPath = __DIR__.'/migration.stub';
+        $stubPath = __DIR__ . '/migration.stub';
         if (!file_exists($stubPath)) {
             $output->writeln("<error>Migration stub file not found at: $stubPath</error>");
             return Command::FAILURE;
