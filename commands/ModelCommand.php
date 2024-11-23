@@ -22,12 +22,13 @@ class ModelCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $addonName = basename(dirname(getcwd()));  // Extract addon name from the parent directory
-        $modelName = $input->getArgument('modelName');
-        $tableName = strtolower($modelName); // Automatically set tableName to lowercase modelName
+        // Get the addon name from the parent directory
+        $addonName  = basename(getcwd());
 
+        $modelName = $input->getArgument('modelName');
+        $tableName = strtolower($modelName).'s'; // Automatically set tableName to lowercase modelName
         $currentDir = getcwd();
-        $modelDir = $currentDir . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Addon' . DIRECTORY_SEPARATOR . $addonName . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Models';
+        $modelDir = $currentDir . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Models';
 
         // Ensure the models directory exists
         if (!is_dir($modelDir)) {
@@ -47,6 +48,7 @@ class ModelCommand extends Command
             return Command::FAILURE;
         }
 
+        // Read the stub and replace placeholders
         $stubContent = file_get_contents($stubPath);
         $modelStub = str_replace(
             ['{{addonName}}', '{{modelName}}', '{{tableName}}'],
@@ -62,45 +64,6 @@ class ModelCommand extends Command
             return Command::FAILURE;
         }
 
-        // Set up the database and check if the table exists
-        try {
-            $this->setupDatabase();
-
-            // Check if the table exists, if not, create it
-            if (!Capsule::schema()->hasTable($tableName)) {
-                $output->writeln("<info>Table '$tableName' does not exist. Creating table...</info>");
-                Capsule::schema()->create($tableName, function (Blueprint $table) {
-                    $table->increments('id');  // Default column for ID
-                    $table->timestamps();  // Timestamps for created_at and updated_at
-                });
-                $output->writeln("<info>Table '$tableName' created successfully.</info>");
-            } else {
-                $output->writeln("<info>Table '$tableName' already exists.</info>");
-            }
-        } catch (\Exception $e) {
-            $output->writeln("<error>Failed to connect to the database: {$e->getMessage()}</error>");
-            return Command::FAILURE;
-        }
-
         return Command::SUCCESS;
-    }
-
-    private function setupDatabase()
-    {
-        $capsule = new Capsule;
-
-        $capsule->addConnection([
-            'driver'    => getenv('DB_CONNECTION'),
-            'host'      => getenv('DB_HOST'),
-            'database'  => getenv('DB_DATABASE'),
-            'username'  => getenv('DB_USERNAME'),
-            'password'  => getenv('DB_PASSWORD'),
-            'charset'   => 'utf8',
-            'collation' => 'utf8_unicode_ci',
-            'prefix'    => '',
-        ]);
-
-        $capsule->setAsGlobal();
-        $capsule->bootEloquent();
     }
 }

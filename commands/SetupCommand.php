@@ -127,7 +127,16 @@ class SetupCommand extends Command
 
 
         // Now create the AdminDispatcher.php file
+        // Get the addon name from the argument
+        $addonName = $input->getArgument('addonName');
+
+        // Get the current working directory
+        $currentDir = getcwd();
+
+        // Set the directory where the AdminDispatcher.php file will be created
         $adminDispatcherDir = $currentDir . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Dispatcher';
+
+        // Ensure the directory exists, create it if necessary
         if (!is_dir($adminDispatcherDir)) {
             if (!mkdir($adminDispatcherDir, 0777, true)) {
                 $output->writeln("<error>Failed to create adminDispatcher directory. Please check permissions.</error>");
@@ -136,7 +145,7 @@ class SetupCommand extends Command
             $output->writeln("<info>Created adminDispatcher directory: $adminDispatcherDir</info>");
         }
 
-        $adminDispatcherFilePath = $adminDispatcherDir . DIRECTORY_SEPARATOR . 'AdminDispatcher.php';
+        // Path to the stub file
         $adminDispatcherStub = __DIR__ . '/adminDispatcher.stub';
 
         if (!file_exists($adminDispatcherStub)) {
@@ -144,15 +153,24 @@ class SetupCommand extends Command
             return Command::FAILURE;
         }
 
+        // Read the stub content
         $adminDispatcherFileContent = file_get_contents($adminDispatcherStub);
-        $adminDispatcherFileContent = str_replace('${addonName}', $addonName, $adminDispatcherFileContent);
 
+        // Replace the placeholder $addonName with the actual addon name
+        $adminDispatcherFileContent = str_replace('$addonName', $addonName, $adminDispatcherFileContent);
+
+        // Set the path to the AdminDispatcher.php file
+        $adminDispatcherFilePath = $adminDispatcherDir . DIRECTORY_SEPARATOR . 'AdminDispatcher.php';
+
+        // Create the AdminDispatcher.php file
         if (file_put_contents($adminDispatcherFilePath, $adminDispatcherFileContent)) {
             $output->writeln("<info>Created AdminDispatcher file: $adminDispatcherFilePath</info>");
         } else {
             $output->writeln("<error>Failed to create $adminDispatcherFilePath. Please check permissions.</error>");
             return Command::FAILURE;
         }
+
+
 
 
         return Command::SUCCESS;
