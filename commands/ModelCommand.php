@@ -1,6 +1,6 @@
 <?php
 
-namespace WHMCS\Module\Addon;
+require __DIR__ . '/../vendor/autoload.php';
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Symfony\Component\Console\Command\Command;
