@@ -1,0 +1,15 @@
+<?php
+
+namespace {{namespace}};
+
+use WHMCS\Module\Addon\{{addonName}}\app\Controllers\BaseController;
+
+class {{controllerName}} extends BaseController
+{
+
+    public function index()
+    {
+        echo "Welcome to the {{controllerName}} ";
+    }
+
+}

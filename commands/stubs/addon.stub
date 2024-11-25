@@ -1,10 +1,12 @@
 <?php
 
-include __DIR__ . '/src/vendor/autoload.php';
-include __DIR__ . '/src/Helper/Helper.php';
+include __DIR__ . '/app/vendor/autoload.php';
+include __DIR__ . '/app/Helper/Helper.php';
 
-use WHMCS\Module\Addon\$addonName\src\AdminDispatcher;
-use WHMCS\Module\Addon\$addonName\src\Application;
+use WHMCS\Module\Addon\$addonName\app\Dispatcher\AdminDispatcher;
+use WHMCS\Module\Addon\$addonName\app\Dispatcher\ClientDispatcher;
+
+use WHMCS\Module\Addon\$addonName\app\Application;
 
 if (!defined('WHMCS')) {
     die('This file cannot be accessed directly');
@@ -47,11 +49,22 @@ function $addonName_deactivate(): array
  */
 function $addonName_output($vars)
 {
-    $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
-
-    $controller = isset($_REQUEST['controller']) ? $_REQUEST['controller'] : '';
+    $controller = $_REQUEST['controller'] ?? 'dashboard';
+    
+    $action = $_REQUEST['action'] ?? 'index';
 
     $response = (new AdminDispatcher)->dispatch($controller, $action, $vars);
 
     echo $response;
 }
+
+
+function $addonName_clientarea($vars): string
+{
+    $controller = $_REQUEST['controller'] ?? 'dashboard';
+    
+    $action = $_REQUEST['action'] ?? 'index';
+
+    return (new ClientDispatcher)->dispatch($controller, $action, $vars);
+}
+

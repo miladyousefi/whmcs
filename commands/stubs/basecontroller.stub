@@ -1,0 +1,69 @@
+<?php
+
+namespace WHMCS\Module\Addon\$addonName\app\Controllers;
+
+class BaseController
+{
+   
+    protected function renderView($view, $data = [])
+    {
+        // Path to the view file
+        $viewPath = __DIR__ . "/../../../resource/views/{$view}.php";
+        $viewContent = '';
+
+        if (file_exists($viewPath)) {
+            // Extract data to variables
+            extract($data);
+
+            // Start output buffering
+            ob_start();
+
+            // Include the view file
+            include $viewPath;
+
+            // Capture the output and store it in $viewContent
+            $viewContent = ob_get_clean();
+        }
+
+        return $viewContent;
+    }
+
+    
+    protected function renderJs($script, $data = [])
+    {
+        // Path to the JS file
+        $jsFile = __DIR__ . "/../../../resource/js/{$script}.js";
+
+        if (file_exists($jsFile)) {
+            $content = file_get_contents($jsFile);
+
+            // Replace placeholders with dynamic data
+            foreach ($data as $key => $value) {
+                $content = str_replace("{{{$key}}}", $value, $content);
+            }
+
+            return $content;
+        } else {
+            throw new \Exception("JS file not found: {$jsFile}");
+        }
+    }
+
+   
+    protected function renderCss($style, $data = [])
+    {
+        $cssFile = __DIR__ . "/../../../resource/css/{$style}.css";
+
+        if (file_exists($cssFile)) {
+            $content = file_get_contents($cssFile);
+
+            // Replace placeholders with dynamic data
+            foreach ($data as $key => $value) {
+                $content = str_replace("{{{$key}}}", $value, $content);
+            }
+
+            return $content;
+        } else {
+            throw new \Exception("CSS file not found: {$cssFile}");
+        }
+    }
+}

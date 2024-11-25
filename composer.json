@@ -1,18 +1,19 @@
 {
-    "name": "miladyousefi/whmcs",
+    "name": "asamserver/wam",
     "description": "Framework for creating WHMCS addon modules.",
     "type": "project",
     "keywords": ["whmcs", "addon", "framework"],
     "license": "MIT",
     "require": {
         "php": ">=8.0",
-        "illuminate/database": "^1.0",
+        "illuminate/database": "^11.0",
+        "illuminate/support": "^11.33",
         "symfony/console": "^6.0",
         "vlucas/phpdotenv": "^5.6"
     },
     "autoload": {
         "psr-4": {
-            "WHMCS\\Module\\Addon\\": "src/"
+            
         }
     },
     "scripts": {
@@ -34,7 +35,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/miladyousefi/whmcs"
+            "url": "https://github.com/asamserver/wam"
         }
     ],
     "minimum-stability": "dev",

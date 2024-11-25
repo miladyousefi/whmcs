@@ -1,0 +1,37 @@
+<?php
+
+namespace WHMCS\Module\Addon\$addonName\app;
+
+use WHMCS\Module\Addon\$addonName\app\Dispatcher\AdminDispatcher;
+use WHMCS\Module\Addon\$addonName\app\Dispatcher\ClientDispatcher;
+
+class Router
+{
+    protected $routes;
+
+    public function __construct()
+    {
+        $this->routes = require __DIR__ . '/routes/web.php';
+    }
+
+    public function handleRequest(string $area, string $controllerName, string $action, array $vars)
+    {
+        // Determine the route key (e.g., 'admin/dashboard')
+        $routeKey = $area . '/' . $controllerName;
+
+        // Check if the route exists
+        if (isset($this->routes[$routeKey])) {
+            $route = $this->routes[$routeKey];
+            $controllerClass = $route['controller'];
+            $actionMethod = $route['action'];
+            $controller = new $controllerClass();
+            if (method_exists($controller, $actionMethod)) {
+                return $controller->$actionMethod($vars);
+            } else {
+                return "Action '$actionMethod' not found in controller '$controllerClass'.";
+            }
+        } else {
+            return "Route '$routeKey' not found.";
+        }
+    }
+}

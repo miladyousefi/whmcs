@@ -1,0 +1,40 @@
+<?php
+
+if (!defined('WHMCS')) {
+    die('This file cannot be accessed directly!');
+}
+
+use Illuminate\Database\Capsule\Manager as Capsule;
+
+if (!function_exists('${addonName}_generateRandomNumber')) {
+    function ${addonName}_generateRandomNumber(): int
+    {
+        $microtime = microtime(true);
+        mt_srand($microtime);
+        $randomNumber = mt_rand();
+        return $randomNumber;
+    }
+}
+
+if (!function_exists('${addonName}_getClientId')) {
+    function ${addonName}_getClientId($userId = null)
+    {
+        if ($_SESSION['uid']){
+            return $_SESSION['uid'];
+        }
+        $userId = $userId ?? json_decode($_SESSION['login_auth_tk'], true)['id'];
+        return Capsule::table('tblusers_clients')->where('auth_user_id', $userId)->first()->client_id;
+    }
+}
+
+
+if (!function_exists('${addonName}_getControllerClass')) {
+    function ${addonName}_getControllerClass(string $controllerName): string
+    {
+        return "WHMCS\\Module\\Addon\\${addonName}\\Controllers\\Admin\\" . ucfirst($controllerName) . "Controller";
+    }
+}
+
+
+
+
